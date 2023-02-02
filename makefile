@@ -20,7 +20,6 @@ $(KMC_MAIN_DIR)/mmer.o \
 $(KMC_MAIN_DIR)/mem_disk_file.o \
 $(KMC_MAIN_DIR)/rev_byte.o \
 $(KMC_MAIN_DIR)/bkb_writer.o \
-$(KMC_MAIN_DIR)/cpu_info.o \
 $(KMC_MAIN_DIR)/bkb_reader.o \
 $(KMC_MAIN_DIR)/fastq_reader.o \
 $(KMC_MAIN_DIR)/timer.o \
@@ -35,10 +34,6 @@ $(KMC_MAIN_DIR)/raduls_sse2.o \
 $(KMC_MAIN_DIR)/raduls_sse41.o \
 $(KMC_MAIN_DIR)/raduls_avx2.o \
 $(KMC_MAIN_DIR)/raduls_avx.o
-
-KMC_LIBS = \
-$(KMC_MAIN_DIR)/libs/libz.a \
-$(KMC_MAIN_DIR)/libs/libbz2.a
 
 KMC_DUMP_OBJS = \
 $(KMC_DUMP_DIR)/nc_utils.o \
@@ -64,10 +59,6 @@ $(KMC_TOOLS_DIR)/fastq_reader.o \
 $(KMC_TOOLS_DIR)/fastq_writer.o \
 $(KMC_TOOLS_DIR)/percent_progress.o
 
-KMC_TOOLS_LIBS = \
-$(KMC_TOOLS_DIR)/libs/libz.a \
-$(KMC_TOOLS_DIR)/libs/libbz2.a
-
 $(KMC_OBJS) $(KMC_DUMP_OBJS) $(KMC_API_OBJS): %.o: %.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -85,7 +76,7 @@ $(KMC_MAIN_DIR)/raduls_avx2.o: $(KMC_MAIN_DIR)/raduls_avx2.cpp
 
 kmc: $(KMC_OBJS) $(RADULS_OBJS)
 	-mkdir -p $(KMC_BIN_DIR)
-	$(CC) $(CLINK) -o $(KMC_BIN_DIR)/$@ $^ $(KMC_LIBS)
+	$(CC) $(CLINK) -o $(KMC_BIN_DIR)/$@ $^ -lbz2 -lz
 
 kmc_dump: $(KMC_DUMP_OBJS) $(KMC_API_OBJS)
 	-mkdir -p $(KMC_BIN_DIR)
@@ -93,7 +84,7 @@ kmc_dump: $(KMC_DUMP_OBJS) $(KMC_API_OBJS)
 
 kmc_tools: $(KMC_TOOLS_OBJS) $(KMC_API_OBJS)
 	-mkdir -p $(KMC_BIN_DIR)
-	$(CC) $(KMC_TOOLS_CLINK) -o $(KMC_BIN_DIR)/$@ $^ $(KMC_TOOLS_LIBS)
+	$(CC) $(KMC_TOOLS_CLINK) -o $(KMC_BIN_DIR)/$@ $^ -lbz2 -lz
 
 $(PY_KMC_API_DIR)/%.o: $(KMC_API_DIR)/%.cpp
 	$(CC) -c -fPIC -Wall -O3 -m64 -std=c++11 $^ -o $@

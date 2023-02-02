@@ -724,15 +724,7 @@ namespace RadulsSort
 		}
 	}
 
-#if defined(__AVX2__)
 #define RADULS_RADIX_SORT_FUNNAME RadixSortMSD_AVX2
-#elif defined (__AVX__)
-#define RADULS_RADIX_SORT_FUNNAME RadixSortMSD_AVX
-#elif defined(__SSE4_1__)
-#define RADULS_RADIX_SORT_FUNNAME RadixSortMSD_SSE41
-#elif defined(__SSE2__)
-#define RADULS_RADIX_SORT_FUNNAME RadixSortMSD_SSE2
-#endif
 
 
 	template<typename KMER_T>
